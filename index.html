@@ -7,120 +7,121 @@
 <style>
   :root {
     --primary: #2563eb;
-    --bg: #f0f4ff;
+    --bg: #f1f5f9;
     --text: #1e293b;
     --radius: 14px;
-    --shadow: 0 6px 16px rgba(0,0,0,0.1);
   }
 
-  * { box-sizing: border-box; }
   body {
-    margin: 0;
     font-family: "Poppins", Arial, sans-serif;
+    margin: 0;
     background: var(--bg);
     color: var(--text);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 16px;
+    line-height: 1.6;
   }
 
-  .container {
-    background: white;
-    width: 100%;
-    max-width: 420px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px;
+  section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 20px;
     text-align: center;
   }
 
-  h1, h2, p {
-    margin: 0 0 16px;
+  h2 {
+    margin-bottom: 12px;
   }
 
-  button, a.button {
-    display: inline-block;
-    padding: 12px 24px;
+  p {
+    margin-bottom: 20px;
+    max-width: 480px;
+  }
+
+  a.button, button {
     background: var(--primary);
     color: white;
-    font-weight: 600;
     text-decoration: none;
+    padding: 12px 28px;
+    border-radius: var(--radius);
     border: none;
-    border-radius: 10px;
+    font-weight: 600;
     cursor: pointer;
+    transition: 0.2s;
+  }
+
+  a.button:hover, button:hover {
+    background: #1d4ed8;
   }
 
   iframe {
     width: 100%;
-    height: 280px;
+    max-width: 480px;
+    height: 300px;
     border: 1px solid #ccc;
     border-radius: var(--radius);
+    margin-bottom: 20px;
   }
 
-  /* Hide all pages by default */
-  .page { display: none; }
-
-  /* Show the targeted page */
-  :target { display: block; }
-
-  /* Default to first page */
-  body:not(:target) #page1 { display: block; }
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
 </style>
 </head>
 <body>
 
-<!-- HOME PAGE -->
-<section id="page1" class="page container">
+<!-- PAGE 1 -->
+<section id="home">
   <h2>Good afternoon Grade 8 learners!</h2>
   <p>Today, we don't have a face-to-face class; however, learning continues through the Alternative Delivery Mode.</p>
   <p>Are you ready to learn? If you're ready, click the button below.</p>
-  <a href="#page2" class="button">GET STARTED</a>
+  <a href="#attendance" class="button">GET STARTED</a>
 </section>
 
-<!-- PAGE 2: Attendance Form -->
-<section id="page2" class="page container">
+<!-- PAGE 2 -->
+<section id="attendance">
   <h2>Before we proceed...</h2>
   <p>Kindly fill out the form for your attendance.</p>
   <iframe src="YOUR_GOOGLE_FORM_LINK_HERE"></iframe>
   <p>Once done with your attendance, click OK.</p>
-  <a href="#page3" class="button">OK</a>
+  <a href="#material1" class="button">OK</a>
 </section>
 
-<!-- PAGE 3: Learning Material Frame 1 -->
-<section id="page3" class="page container">
+<!-- PAGE 3 -->
+<section id="material1">
   <h2>Learning Material</h2>
   <p>Here’s your first learning material. Watch or review the link below.</p>
   <iframe src="YOUR_VIDEO_OR_SLIDE_LINK_HERE"></iframe>
-  <a href="#page4" class="button">NEXT</a>
+  <a href="#topic" class="button">NEXT</a>
 </section>
 
-<!-- PAGE 4: Topic Introduction -->
-<section id="page4" class="page container">
+<!-- PAGE 4 -->
+<section id="topic">
   <h2>Here's our topic today</h2>
   <p>Our topic is about <strong>EME</strong>.</p>
   <iframe src="YOUR_VIDEO_SLIDE_SPREADSHEET_LINK_HERE"></iframe>
-  <a href="#page5" class="button">NEXT</a>
+  <a href="#check" class="button">NEXT</a>
 </section>
 
-<!-- PAGE 5: Understanding Check -->
-<section id="page5" class="page container">
+<!-- PAGE 5 -->
+<section id="check">
   <h2>Check Your Understanding</h2>
-  <p>You are done reading the context, let's check your understanding.</p>
-  <a href="#page6" class="button">PROCEED</a>
+  <p>You are done reading the context — let's check your understanding.</p>
+  <a href="#activity" class="button">PROCEED</a>
 </section>
 
-<!-- PAGE 6: Activity -->
-<section id="page6" class="page container">
+<!-- PAGE 6 -->
+<section id="activity">
   <h2>Answer this Activity</h2>
   <p>Kindly answer the activity form below.</p>
   <iframe src="YOUR_ACTIVITY_FORM_LINK_HERE"></iframe>
-  <a href="#page7" class="button">DONE</a>
+  <a href="#done" class="button">DONE</a>
 </section>
 
-<!-- PAGE 7: Completion Page -->
-<section id="page7" class="page container">
+<!-- PAGE 7 -->
+<section id="done">
   <h2>You're done with today's lesson!</h2>
   <p>Thank you for your participation. Great job, Grade 8 learners!</p>
 </section>
