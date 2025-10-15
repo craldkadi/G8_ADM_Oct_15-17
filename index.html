@@ -3,131 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 8 ADM Learning</title>
+<title>Asian Folk Dance ADM Lesson</title>
 <style>
-  :root {
-    --primary: #2563eb;
-    --bg: #f1f5f9;
-    --text: #1e293b;
-    --radius: 14px;
+  * {
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
   }
 
   body {
-    font-family: "Poppins", Arial, sans-serif;
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    background: linear-gradient(180deg, #fefae0, #faedcd);
+    color: #333;
+    text-align: center;
+    padding: 20px;
     line-height: 1.6;
   }
 
   section {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 32px 20px;
-    text-align: center;
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    font-size: 1.6em;
+    color: #d97706;
   }
 
   h2 {
-    margin-bottom: 12px;
+    color: #2563eb;
+    margin-top: 15px;
+    font-size: 1.2em;
   }
 
   p {
-    margin-bottom: 20px;
-    max-width: 480px;
+    margin: 10px 0;
+    font-size: 1em;
   }
 
-  a.button, button {
-    background: var(--primary);
-    color: white;
+  a {
+    color: #16a34a;
     text-decoration: none;
-    padding: 12px 28px;
-    border-radius: var(--radius);
-    border: none;
     font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    background: #2563eb;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
     cursor: pointer;
-    transition: 0.2s;
+    font-size: 1em;
+    margin-top: 20px;
+    transition: 0.3s;
   }
 
-  a.button:hover, button:hover {
-    background: #1d4ed8;
+  button:hover {
+    background: #1e40af;
   }
 
-  iframe {
-    width: 100%;
-    max-width: 480px;
-    height: 300px;
-    border: 1px solid #ccc;
-    border-radius: var(--radius);
-    margin-bottom: 20px;
-  }
-
-  /* Smooth scroll */
-  html {
-    scroll-behavior: smooth;
+  .highlight {
+    color: #d97706;
+    font-weight: 600;
   }
 </style>
 </head>
 <body>
 
-<!-- PAGE 1 -->
 <section id="home">
-  <h2>Good afternoon Grade 8 learners!</h2>
-  <p>Today, we don't have a face-to-face class; however, learning continues through the Alternative Delivery Mode.</p>
-  <p>Are you ready to learn? If you're ready, click the button below.</p>
-  <a href="#attendance" class="button">GET STARTED</a>
+  <h1>Good afternoon, Grade 8 learners! 👋</h1>
+  <p>Today, we don’t have a face-to-face class, pero tuloy pa rin ang learning through our <strong>Alternative Delivery Mode (ADM)</strong>! 💪</p>
+  <p>Ready ka na ba matuto about <span class="highlight">Asian Folk Dances</span>? 😍</p>
+  <button onclick="location.href='#objectives'">GET STARTED</button>
 </section>
 
-<!-- PAGE 2 -->
-<section id="attendance">
-  <h2>Before we proceed...</h2>
-  <p>Kindly fill out the form for your attendance.</p>
-  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdAtR0u_iI53nf56pAcL2ZquBe1WMWXSZ5LLpS2iScTwFwyrQ/viewform?usp=pp_url"></iframe>
-  <p>Once done with your attendance, click OK.</p>
-  <a href="#material1" class="button">OK</a>
+<section id="objectives">
+  <h2>🎯 Learning Objectives</h2>
+  <p>After this lesson, you are expected to:</p>
+  <ul style="text-align:left;">
+    <li>a. Identify the <strong>cultural background, movements, and significance</strong> of selected Asian folk dances such as the Korean Fan Dance, Thai Ram Thai, and Balinese Legong.</li>
+    <li>b. Show <strong>appreciation and respect</strong> for the artistic traditions of Asian communities through enthusiasm, cooperation, and creativity.</li>
+    <li>c. Perform selected <strong>Asian cultural dances</strong> individually or in small groups (2–3 members) using proper movements, timing, and props.</li>
+  </ul>
+  <button onclick="location.href='#lesson'">NEXT</button>
 </section>
 
-<!-- PAGE 3 -->
-<section id="material1">
-  <h2>Learning Material</h2>
-  <p>Here’s your first learning material. Watch or review the link below.</p>
-  <iframe src="https://drive.google.com/file/d/1IxjCVmKh9phIRG9sukJ3l89h20mZBCKZ/view?usp=drive_link"></iframe>
-  <a href="#topic" class="button">NEXT</a>
+<section id="lesson">
+  <h2>💃 Let’s Explore the Dances!</h2>
+  <p><strong>Korean Fan Dance (Buchae Chum)</strong><br>
+  A graceful traditional dance from Korea using colorful fans to form flower-like patterns. Watch here 👉 
+  <a href="https://www.youtube.com/watch?v=0YVcdH6YH0g" target="_blank">Korean Fan Dance Video</a></p>
+
+  <p><strong>Thai Ram Thai Dance</strong><br>
+  A classical Thai dance known for its elegant hand movements and smooth rhythm. Watch here 👉 
+  <a href="https://www.youtube.com/watch?v=04sfcOtG4u0" target="_blank">Thai Ram Thai Video</a></p>
+
+  <p><strong>Balinese Legong Dance</strong><br>
+  A traditional Balinese dance with expressive gestures and intricate movements. Watch here 👉 
+  <a href="https://www.youtube.com/watch?v=WG9GZIOAftI" target="_blank">Balinese Legong Video</a></p>
+
+  <button onclick="location.href='#activity'">NEXT</button>
 </section>
 
-<!-- PAGE 4 -->
-<section id="topic">
-  <h2>Here's our topic today</h2>
-  <p>Our topic is about <strong>EME</strong>.</p>
-  <iframe src="YOUR_VIDEO_SLIDE_SPREADSHEET_LINK_HERE"></iframe>
-  <a href="#check" class="button">NEXT</a>
-</section>
-
-<!-- PAGE 5 -->
-<section id="check">
-  <h2>Check Your Understanding</h2>
-  <p>You are done reading the context — let's check your understanding.</p>
-  <a href="#activity" class="button">PROCEED</a>
-</section>
-
-<!-- PAGE 6 -->
 <section id="activity">
-  <h2>Answer this Activity</h2>
-  <p>Kindly answer the activity form below.</p>
-  <iframe src="YOUR_ACTIVITY_FORM_LINK_HERE"></iframe>
-  <a href="#done" class="button">DONE</a>
+  <h2>🕺 Your Performance Activity</h2>
+  <p><strong>Instructions:</strong></p>
+  <p>1️⃣ Choose and study one (1) Asian cultural dance for your performance:</p>
+  <ul style="text-align:left;">
+    <li>🌸 Korean Fan Dance (Buchae Chum)</li>
+    <li>🌺 Thai Ram Thai Dance</li>
+    <li>💫 Balinese Legong Dance</li>
+  </ul>
+
+  <p>🔹 Watch sample videos shared in our GC or on YouTube.<br>
+  🔹 Take note of cultural significance and props used.</p>
+
+  <p>2️⃣ Practice individually or in small groups (2–3 members).</p>
+  <ul style="text-align:left;">
+    <li>Wear your PE uniform during practice and performance.</li>
+    <li>Use or create your own props (fans, scarves, ribbons, etc.).</li>
+    <li>Take clear practice photos (faces hidden, body visible) for October 15–16.</li>
+  </ul>
+
+  <p>3️⃣ Record your final performance on <strong>Friday, October 17</strong>.</p>
+  <ul style="text-align:left;">
+    <li>Video must be at least 1 minute long.</li>
+    <li>Show proper expression, timing, and coordination.</li>
+    <li>Submit your performance in our GC from <strong>12:40 PM–7:00 PM</strong>.</li>
+  </ul>
+
+  <p><strong>🎯 Output for Days 1–3:</strong><br>
+  🎬 One (1) Cultural Dance Performance Video<br>
+  📸 Two (2) Practice Photos (attendance proof)</p>
+
+  <p>Good luck, Grade 8 dancers! 💃✨</p>
+  <button onclick="location.href='#end'">DONE</button>
 </section>
 
-<!-- PAGE 7 -->
-<section id="done">
-  <h2>You're done with today's lesson!</h2>
-  <p>Thank you for your participation. Great job, Grade 8 learners!</p>
+<section id="end">
+  <h2>🎉 You’re done with today’s lesson!</h2>
+  <p>Ang galing mo! 👏 Keep practicing and exploring Asian culture through dance! 🇰🇷🇹🇭🇮🇩</p>
 </section>
 
 </body>
 </html>
-
-
-
