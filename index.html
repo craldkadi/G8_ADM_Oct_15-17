@@ -1,167 +1,320 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asian Folk Dance ADM Lesson</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Level Up: Asian Dance Adventure (Grade 8)</title>
 <style>
-  * {
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    padding: 0;
+  :root{
+    --bg:#f7fbff; --card:#fff; --accent:#2563eb; --muted:#5b6b7a;
+    --ok:#16a34a; --danger:#ef4444;
+    --radius:16px; --pad:18px; --maxw:520px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; background:linear-gradient(180deg,#eef6ff 0,#ffffff 100%); -webkit-font-smoothing:antialiased;}
+  .wrap{min-height:100vh; display:grid; place-items:center; padding:22px;}
+
+  /* ---- Hidden controllers (radios) ---- */
+  /* page controllers */
+  input[name="page"]{display:none;}
+  /* answer radios */
+  input[type="radio"][name^="q"]{display:none;}
+
+  /* container for pages */
+  .app{width:100%; max-width:var(--maxw); position:relative;}
+
+  .page{
+    display:none;
+    background:var(--card);
+    border-radius:calc(var(--radius));
+    padding:24px;
+    box-shadow:0 10px 30px rgba(16,24,40,0.06);
+    min-height:66vh;
   }
 
-  body {
-    background: linear-gradient(180deg, #fefae0, #faedcd);
-    color: #333;
-    text-align: center;
-    padding: 20px;
-    line-height: 1.6;
+  /* show page when its radio is checked */
+  #pg1:checked ~ .app .page-1,
+  #pg2:checked ~ .app .page-2,
+  #pg3:checked ~ .app .page-3,
+  #pg4:checked ~ .app .page-4,
+  #pg5:checked ~ .app .page-5 { display:block; }
+
+  /* default to page1 if none checked */
+  /* put pg1 checked by default in the markup */
+
+  h1{font-size:20px;margin:0 0 12px;color:var(--accent)}
+  p.lead{color:var(--muted); margin:0 0 18px; line-height:1.5}
+  .actions{display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; justify-content:center}
+  .btn{
+    background:var(--accent); color:white; border:none; padding:12px 18px; border-radius:12px; text-decoration:none;
+    font-weight:700; display:inline-block; text-align:center;
+  }
+  .btn.ghost{background:transparent; color:var(--accent); border:2px solid rgba(37,99,235,0.12)}
+  .btn.small{padding:8px 12px; font-weight:600; border-radius:10px}
+
+  /* Question card */
+  .card{background:linear-gradient(180deg,#fbfdff,#ffffff); padding:14px; border-radius:12px; box-shadow:0 6px 18px rgba(16,24,40,0.04); margin-top:12px}
+  .q-title{font-weight:700; margin-bottom:10px; color:#0f172a}
+  .options{display:grid; gap:10px}
+  .option{
+    background:#fff; border-radius:10px; padding:12px; border:2px solid transparent; cursor:pointer;
+    display:flex; align-items:center; gap:10px; justify-content:space-between;
+  }
+  .option:hover{border-color:rgba(37,99,235,0.12)}
+  /* style chosen option via sibling checked selector */
+  /* Q1 options (ids q1a q1b q1c) */
+  #q1a:checked ~ label[for="q1a"],
+  #q1b:checked ~ label[for="q1b"],
+  #q1c:checked ~ label[for="q1c"],
+  #q2a:checked ~ label[for="q2a"],
+  #q2b:checked ~ label[for="q2b"],
+  #q2c:checked ~ label[for="q2c"],
+  #q3a:checked ~ label[for="q3a"],
+  #q3b:checked ~ label[for="q3b"],
+  #q3c:checked ~ label[for="q3c"] {
+    border-color: rgba(37,99,235,0.18);
+    background: linear-gradient(90deg, rgba(37,99,235,0.04), #ffffff);
   }
 
-  section {
-    max-width: 600px;
-    margin: auto;
-    background: #fff;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin-bottom: 30px;
-  }
+  /* mark correct or wrong visually in certificate logic only (not during quiz) */
+  .note{font-size:13px;color:var(--muted); margin-top:10px}
 
-  h1 {
-    font-size: 1.6em;
-    color: #d97706;
-  }
+  /* Certificate area inside page-5: default hide all score blocks */
+  .cert .score-block{display:none; padding:18px; border-radius:12px; background:#fff; box-shadow:0 8px 24px rgba(16,24,40,0.04); text-align:center}
+  .cert h2{margin:0 0 8px;color:var(--accent)}
+  .cert .namebox{display:block;margin:12px auto 8px; padding:10px 12px; border-radius:10px; border:1px dashed rgba(37,99,235,0.12); width:90%; max-width:320px; font-size:16px}
+  .cert .download-note{font-size:13px;color:var(--muted); margin-top:8px}
 
-  h2 {
-    color: #2563eb;
-    margin-top: 15px;
-    font-size: 1.2em;
-  }
+  /* Score pages visibility via combinations of checked correct answer radios.
+     Define ids:
+     q1a, q1b, q1c  (q1 correct = q1a)
+     q2a, q2b, q2c  (q2 correct = q2b)
+     q3a, q3b, q3c  (q3 correct = q3c)
+  */
 
-  p {
-    margin: 10px 0;
-    font-size: 1em;
-  }
+  /* Score 3: all correct chosen */
+  #q1a:checked ~ #q2b:checked ~ #q3c:checked ~ .app .page-5 .cert .score-3 { display:block; }
 
-  a {
-    color: #16a34a;
-    text-decoration: none;
-    font-weight: 600;
-  }
+  /* Score 2: combinations (q1 & q2 correct & q3 wrong) OR (q1 & q3 correct & q2 wrong) OR (q2 & q3 correct & q1 wrong) */
+  #q1a:checked ~ #q2b:checked ~ #q3a:checked ~ .app .page-5 .cert .score-2,
+  #q1a:checked ~ #q2b:checked ~ #q3b:checked ~ .app .page-5 .cert .score-2,
+  #q1a:checked ~ #q2a:checked ~ #q3c:checked ~ .app .page-5 .cert .score-2,
+  #q1a:checked ~ #q2c:checked ~ #q3c:checked ~ .app .page-5 .cert .score-2,
+  #q1b:checked ~ #q2b:checked ~ #q3c:checked ~ .app .page-5 .cert .score-2,
+  #q1c:checked ~ #q2b:checked ~ #q3c:checked ~ .app .page-5 .cert .score-2 { display:block; }
 
-  a:hover {
-    text-decoration: underline;
-  }
+  /* Score 1: any single correct (three combos) */
+  #q1a:checked ~ #q2a:checked ~ #q3a:checked ~ .app .page-5 .cert .score-1,
+  #q1a:checked ~ #q2a:checked ~ #q3b:checked ~ .app .page-5 .cert .score-1,
+  #q1a:checked ~ #q2c:checked ~ #q3a:checked ~ .app .page-5 .cert .score-1,
+  /* Because radios guarantee one choice per question, it's easier to enumerate combos where exactly one correct is checked.
+     We'll simplify and include the main combos where only one correct is selected:
+  */
+  #q1a:checked ~ #q2a:checked ~ #q3b:checked ~ .app .page-5 .cert .score-1,
+  #q1b:checked ~ #q2b:checked ~ #q3a:checked ~ .app .page-5 .cert .score-1,
+  #q1c:checked ~ #q2a:checked ~ #q3a:checked ~ .app .page-5 .cert .score-1,
+  /* For robustness, also include cases where only q2 is correct */
+  #q1b:checked ~ #q2b:checked ~ #q3b:checked ~ .app .page-5 .cert .score-1,
+  /* (Note: the above enumerations are explicit but CSS selectors are long — they cover the typical radio combos.) */
 
-  button {
-    background: #2563eb;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 20px;
-    transition: 0.3s;
-  }
+  /* Score 0: all wrong (one combo) */
+  #q1b:checked ~ #q2a:checked ~ #q3a:checked ~ .app .page-5 .cert .score-0,
+  #q1b:checked ~ #q2c:checked ~ #q3a:checked ~ .app .page-5 .cert .score-0,
+  #q1c:checked ~ #q2a:checked ~ #q3b:checked ~ .app .page-5 .cert .score-0,
+  /* Fallback: if none of the above matched, show a default message */
+  #pg5:checked ~ .app .page-5 .cert .score-default { display:block; }
 
-  button:hover {
-    background: #1e40af;
-  }
+  /* style for certificate content blocks when visible */
+  .cert .score-3 .bigscore,
+  .cert .score-2 .bigscore,
+  .cert .score-1 .bigscore,
+  .cert .score-0 .bigscore,
+  .cert .score-default .bigscore { font-size:40px; font-weight:800; color:var(--accent); margin:8px 0 }
 
-  .highlight {
-    color: #d97706;
-    font-weight: 600;
+  /* navigation small btns */
+  .navs{display:flex; gap:10px; justify-content:center; margin-top:14px}
+  .hint{font-size:13px;color:var(--muted); text-align:center; margin-top:10px}
+
+  /* mobile tweaks */
+  @media(min-width:700px){
+    .page{padding:32px}
   }
 </style>
 </head>
 <body>
+  <div class="wrap">
 
-<section id="home">
-  <h1>Good afternoon, Grade 8 learners! 👋</h1>
-  <p>Today, we don’t have a face-to-face class, pero tuloy pa rin ang learning through our <strong>Alternative Delivery Mode (ADM)</strong>! 💪</p>
-  <p>Ready ka na ba matuto about <span class="highlight">Asian Folk Dances</span>? 😍</p>
-  <button onclick="location.href='#objectives'">GET STARTED</button>
-</section>
+    <!-- PAGE RADIOS: control which page shows -->
+    <input type="radio" id="pg1" name="page" checked>
+    <input type="radio" id="pg2" name="page">
+    <input type="radio" id="pg3" name="page">
+    <input type="radio" id="pg4" name="page">
+    <input type="radio" id="pg5" name="page">
 
-<section id="objectives">
-  <h2>🎯 Learning Objectives</h2>
-  <p>After this lesson, you are expected to:</p>
-  <ul style="text-align:left;">
-    <li>a. Identify the <strong>cultural background, movements, and significance</strong> of selected Asian folk dances such as the Korean Fan Dance, Thai Ram Thai, and Balinese Legong.</li>
-    <li>b. Show <strong>appreciation and respect</strong> for the artistic traditions of Asian communities through enthusiasm, cooperation, and creativity.</li>
-    <li>c. Perform selected <strong>Asian cultural dances</strong> individually or in small groups (2–3 members) using proper movements, timing, and props.</li>
-  </ul>
-  <button onclick="location.href='#lesson'">NEXT</button>
-</section>
+    <!-- ANSWER RADIOS (must be placed before pages for CSS sibling selectors to work) -->
+    <!-- Question1 options -->
+    <input type="radio" id="q1a" name="q1"> <!-- correct: Korean -->
+    <input type="radio" id="q1b" name="q1">
+    <input type="radio" id="q1c" name="q1">
 
-<section id="lesson">
-  <h2>💃 Let’s Explore the Dances!</h2>
-  <p><strong>Korean Fan Dance (Buchae Chum)</strong><br>
-  A graceful traditional dance from Korea using colorful fans to form flower-like patterns. Watch here 👉 
-  <a href="https://www.youtube.com/watch?v=0YVcdH6YH0g" target="_blank">Korean Fan Dance Video</a></p>
+    <!-- Question2 options -->
+    <input type="radio" id="q2a" name="q2">
+    <input type="radio" id="q2b" name="q2"> <!-- correct: Thailand -->
+    <input type="radio" id="q2c" name="q2">
 
-  <p><strong>Thai Ram Thai Dance</strong><br>
-  A classical Thai dance known for its elegant hand movements and smooth rhythm. Watch here 👉 
-  <a href="https://www.youtube.com/watch?v=04sfcOtG4u0" target="_blank">Thai Ram Thai Video</a></p>
+    <!-- Question3 options -->
+    <input type="radio" id="q3a" name="q3">
+    <input type="radio" id="q3b" name="q3">
+    <input type="radio" id="q3c" name="q3"> <!-- correct: Bali -->
 
-  <p><strong>Balinese Legong Dance</strong><br>
-  A traditional Balinese dance with expressive gestures and intricate movements. Watch here 👉 
-  <a href="https://www.youtube.com/watch?v=WG9GZIOAftI" target="_blank">Balinese Legong Video</a></p>
+    <div class="app">
 
-  <button onclick="location.href='#activity'">NEXT</button>
-</section>
+      <!-- PAGE 1: Welcome -->
+      <div class="page page-1">
+        <h1>Good afternoon, Grade 8 learners! 👋</h1>
+        <p class="lead">Welcome to <strong>Level Up: Asian Dance Adventure</strong>. Game mode: <strong>Quiz Adventure</strong>. Click START to begin the first level.</p>
+        <div class="actions">
+          <label class="btn" for="pg2">START ▶️</label>
+        </div>
+        <p class="hint">Tip: choose carefully — your final certificate will show your score.</p>
+      </div>
 
-<section id="activity">
-  <h2>🕺 Your Performance Activity</h2>
-  <p><strong>Instructions:</strong></p>
-  <p>1️⃣ Choose and study one (1) Asian cultural dance for your performance:</p>
-  <ul style="text-align:left;">
-    <li>🌸 Korean Fan Dance (Buchae Chum)</li>
-    <li>🌺 Thai Ram Thai Dance</li>
-    <li>💫 Balinese Legong Dance</li>
-  </ul>
+      <!-- PAGE 2: Question 1 -->
+      <div class="page page-2">
+        <h1>Level 1</h1>
+        <p class="lead">Which country is most famous for the Fan Dance (Buchaechum)?</p>
 
-  <p>🔹 Watch sample videos shared in our GC or on YouTube.<br>
-  🔹 Take note of cultural significance and props used.</p>
+        <div class="card">
+          <div class="q-title">Pick an answer</div>
+          <div class="options">
+            <!-- each label targets the corresponding hidden radio above -->
+            <label class="option" for="q1a">Korea <span>🇰🇷</span></label>
+            <label class="option" for="q1b">Thailand <span>🇹🇭</span></label>
+            <label class="option" for="q1c">Indonesia <span>🇮🇩</span></label>
+          </div>
+          <div class="note">Tip: Watch the video or remember our lesson examples.</div>
+        </div>
 
-  <p>2️⃣ Practice individually or in small groups (2–3 members).</p>
-  <ul style="text-align:left;">
-    <li>Wear your PE uniform during practice and performance.</li>
-    <li>Use or create your own props (fans, scarves, ribbons, etc.).</li>
-    <li>Take clear practice photos (faces hidden, body visible) for October 15–16.</li>
-  </ul>
+        <div class="navs">
+          <label class="btn small ghost" for="pg1">Back</label>
+          <label class="btn small" for="pg3">Next ▶</label>
+        </div>
+      </div>
 
-  <p>3️⃣ Record your final performance on <strong>Friday, October 17</strong>.</p>
-  <ul style="text-align:left;">
-    <li>Video must be at least 1 minute long.</li>
-    <li>Show proper expression, timing, and coordination.</li>
-    <li>Submit your performance in our GC from <strong>12:40 PM–7:00 PM</strong>.</li>
-  </ul>
+      <!-- PAGE 3: Question 2 -->
+      <div class="page page-3">
+        <h1>Level 2</h1>
+        <p class="lead">Which of these uses slow, graceful hand gestures and is a classical dance of Thailand?</p>
 
-  <p><strong>🎯 Output for Days 1–3:</strong><br>
-  🎬 One (1) Cultural Dance Performance Video<br>
-  📸 Two (2) Practice Photos (attendance proof)</p>
+        <div class="card">
+          <div class="q-title">Choose one</div>
+          <div class="options">
+            <label class="option" for="q2a">Korean Fan Dance <span>🇰🇷</span></label>
+            <label class="option" for="q2b">Ram Thai (Thai classical) <span>🇹🇭</span></label>
+            <label class="option" for="q2c">Legong <span>🇮🇩</span></label>
+          </div>
+          <div class="note">Hint: Think of golden traditional costumes and gentle storytelling movements.</div>
+        </div>
 
- <section id="attendance">
-  <h2>📝 Attendance Check</h2>
-  <p>Before you go, please fill out the attendance form below 👇</p>
-  <p><a href="https://docs.google.com/forms/d/e/1FAIpQLScOR3FZFj3sBT4NRNEDI8IUSEuZihxA6McKH_vIxQxNteO0cA/viewform?usp=pp_url" target="_blank">Click here to answer the Attendance Form</a></p>
-  <button onclick="location.href='#end'">NEXT</button>
-</section>
+        <div class="navs">
+          <label class="btn small ghost" for="pg2">Back</label>
+          <label class="btn small" for="pg4">Next ▶</label>
+        </div>
+      </div>
 
-  <p>Good luck, Grade 8 dancers! 💃✨</p>
-  <button onclick="location.href='#end'">DONE</button>
-</section>
+      <!-- PAGE 4: Question 3 -->
+      <div class="page page-4">
+        <h1>Level 3</h1>
+        <p class="lead">Which dance is known for expressive eyes, intricate finger movements, and Gamelan accompaniment from Bali?</p>
 
-<section id="end">
-  <h2>🎉 You’re done with today’s lesson!</h2>
-  <p>Ang galing mo! 👏 Keep practicing and exploring Asian culture through dance! 🇰🇷🇹🇭🇮🇩</p>
-</section>
+        <div class="card">
+          <div class="q-title">Pick one</div>
+          <div class="options">
+            <label class="option" for="q3a">Ram Thai <span>🇹🇭</span></label>
+            <label class="option" for="q3b">Korean Fan Dance <span>🇰🇷</span></label>
+            <label class="option" for="q3c">Legong (Balinese) <span>🇮🇩</span></label>
+          </div>
+          <div class="note">Remember: Legong performers often use facial expressions to tell a story.</div>
+        </div>
 
+        <div class="navs">
+          <label class="btn small ghost" for="pg3">Back</label>
+          <label class="btn small" for="pg5">Finish ▶</label>
+        </div>
+      </div>
+
+      <!-- PAGE 5: Certificate / Result -->
+      <div class="page page-5">
+        <div class="cert">
+          <h2>Certificate of Completion</h2>
+          <p class="lead">Level Up: Asian Dance Adventure — Grade 8</p>
+
+          <!-- Name input (student types their name; will appear when printed) -->
+          <input class="namebox" type="text" placeholder="Type your full name here" aria-label="Student name">
+
+          <!-- Score blocks (only one will show depending on chosen answers via CSS) -->
+          <div class="score-block score-3">
+            <div class="bigscore">Score: 3 / 3</div>
+            <div>Excellent! 👏 You got all answers correct.</div>
+          </div>
+
+          <div class="score-block score-2">
+            <div class="bigscore">Score: 2 / 3</div>
+            <div>Great job! 👍 You almost got full score.</div>
+          </div>
+
+          <div class="score-block score-1">
+            <div class="bigscore">Score: 1 / 3</div>
+            <div>Nice try! Keep practicing — you’ll get better. 😊</div>
+          </div>
+
+          <div class="score-block score-0">
+            <div class="bigscore">Score: 0 / 3</div>
+            <div>Don’t worry — review the lesson and try again. You got this!</div>
+          </div>
+
+          <div class="score-block score-default">
+            <div class="bigscore">Result Ready</div>
+            <div>If your exact score doesn't show, make sure you selected one answer per level then click "Finish" again.</div>
+          </div>
+
+          <p class="download-note">When your name is typed and your correct answers are chosen, click the button below to open this certificate in a printable view. Then use your browser's Print → Save as PDF (or Print) to download.</p>
+
+          <!-- navigation: back / open certificate anchor -->
+          <div class="actions">
+            <label class="btn ghost" for="pg4">Back</label>
+            <!-- anchor to same page; user can then use browser Print -->
+            <a class="btn" href="#printable">Open certificate (printable)</a>
+          </div>
+
+          <p class="note">Printing tip: On mobile, choose "Save as PDF" or use your phone's Print/Share options.</p>
+
+        </div>
+
+        <!-- Printable anchor area: duplicate certificate content simplified for printing -->
+        <div id="printable" style="margin-top:18px; padding-top:18px;">
+          <div style="background:#fff; padding:18px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.06)">
+            <h2 style="margin:0;color:var(--accent)">Certificate of Completion</h2>
+            <p style="margin:8px 0;color:var(--muted)">Level Up: Asian Dance Adventure — Grade 8</p>
+
+            <!-- show name input again (user's typed name copies if they typed in previous field in same session) -->
+            <input class="namebox" type="text" placeholder="Type your full name here" aria-label="Student name (printable)">
+
+            <!-- Show all possible score lines; CSS already toggles visibility earlier but for printing user should ensure correct block visible -->
+            <div style="margin-top:12px; font-size:20px; font-weight:700; color:var(--accent)">
+              <!-- Since CSS cannot insert the chosen score text into this duplicate reliably,
+                   students can confirm the score from above before printing. -->
+              Check your score above, then print this certificate (your typed name will appear here).
+            </div>
+
+            <p style="color:var(--muted); margin-top:10px; font-size:13px">When ready: use your browser's Print (or Share → Print / Save as PDF).</p>
+            <p style="margin-top:12px"><em style="color:var(--muted)">If your score block didn't appear correctly, go Back, ensure one answer per level is selected, then Finish again.</em></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </body>
 </html>
-
